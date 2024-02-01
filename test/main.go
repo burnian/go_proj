@@ -3,6 +3,9 @@ package main
 import (
 	"fmt"
 	"reflect"
+
+	utils "common"
+	"test/libs"
 )
 
 // iota can be used only in const() block
@@ -18,94 +21,9 @@ type Book struct {
 	Author string `json:"jauthor"` //info:"作者"
 }
 
-func init() {
-	fmt.Println("main.go init()")
-}
-
-// func f1() {
-// 	fmt.Println("f1")
-// }
-
-// func f2() {
-// 	fmt.Println("f2")
-// }
-
-// func f3() {
-// 	fmt.Println("f3")
-// }
-
-// func f4(arr [5]int) {
-// 	arr[0] = 99
-// }
-
-// type assertion test
-func generalTypeTest(arg interface{}) {
-	v1, flag1 := arg.(int)
-	fmt.Println("v1", v1)
-	if flag1 {
-		fmt.Println("all_type_test is int:", v1)
-		return
-	}
-
-	v2, flag2 := arg.(string)
-	fmt.Println("v2", v2)
-	if flag2 {
-		fmt.Println("all_type_test is string:", v2)
-		return
-	}
-
-	v3, flag := arg.(Book)
-	fmt.Println("v3", v3)
-	if flag {
-		fmt.Println("all_type_test is Book:", v3.Title, "from", v3.Author)
-		return
-	}
-}
-
-func DoFieldAndMethod(input interface{}) {
-	inputType := reflect.TypeOf(input)
-	inputValue := reflect.ValueOf(input)
-
-	fmt.Println("inputType:", inputType)
-	fmt.Println("inputValue:", inputValue)
-
-	// get field
-	for i := 0; i < inputType.NumField(); i++ {
-		field := inputType.Field(i)
-		value := inputValue.Field(i)
-		fmt.Println("field:", field.Name, "type:", field.Type, "value:", value)
-	}
-
-	// get method
-	for i := 0; i < inputType.NumMethod(); i++ {
-		method := inputType.Method(i)
-		fmt.Println("method:", method.Name, "type:", method.Type)
-	}
-}
-
-func findTag(input interface{}) {
-	elems := reflect.TypeOf(input).Elem()
-	for i := 0; i < elems.NumField(); i++ {
-		dic_tag := elems.Field(i).Tag
-		fmt.Println("tag info:", dic_tag.Get("info"), "json:", dic_tag.Get("json"))
-	}
-}
-
-func fibonacci(c, quit chan int) {
-	x, y := 1, 1
-	for {
-		select {
-		case c <- x:
-			x += y
-			x, y = y, x
-		case <-quit:
-			return
-		}
-	}
-}
-
 func main() {
-	fmt.Println("sdf")
+	utils.Show()
+	libs.Show1()
 
 	//////////////////////////////////////////////////
 	// defer will be executed after the function returns as LIFO
@@ -226,4 +144,90 @@ func main() {
 
 	// m2 := make(map[string]int)
 	// fmt.Println("m2:", m2)
+}
+
+func init() {
+	fmt.Println("main.go init()")
+}
+
+// func f1() {
+// 	fmt.Println("f1")
+// }
+
+// func f2() {
+// 	fmt.Println("f2")
+// }
+
+// func f3() {
+// 	fmt.Println("f3")
+// }
+
+// func f4(arr [5]int) {
+// 	arr[0] = 99
+// }
+
+// type assertion test
+func generalTypeTest(arg interface{}) {
+	v1, flag1 := arg.(int)
+	fmt.Println("v1", v1)
+	if flag1 {
+		fmt.Println("all_type_test is int:", v1)
+		return
+	}
+
+	v2, flag2 := arg.(string)
+	fmt.Println("v2", v2)
+	if flag2 {
+		fmt.Println("all_type_test is string:", v2)
+		return
+	}
+
+	v3, flag := arg.(Book)
+	fmt.Println("v3", v3)
+	if flag {
+		fmt.Println("all_type_test is Book:", v3.Title, "from", v3.Author)
+		return
+	}
+}
+
+func DoFieldAndMethod(input interface{}) {
+	inputType := reflect.TypeOf(input)
+	inputValue := reflect.ValueOf(input)
+
+	fmt.Println("inputType:", inputType)
+	fmt.Println("inputValue:", inputValue)
+
+	// get field
+	for i := 0; i < inputType.NumField(); i++ {
+		field := inputType.Field(i)
+		value := inputValue.Field(i)
+		fmt.Println("field:", field.Name, "type:", field.Type, "value:", value)
+	}
+
+	// get method
+	for i := 0; i < inputType.NumMethod(); i++ {
+		method := inputType.Method(i)
+		fmt.Println("method:", method.Name, "type:", method.Type)
+	}
+}
+
+func findTag(input interface{}) {
+	elems := reflect.TypeOf(input).Elem()
+	for i := 0; i < elems.NumField(); i++ {
+		dic_tag := elems.Field(i).Tag
+		fmt.Println("tag info:", dic_tag.Get("info"), "json:", dic_tag.Get("json"))
+	}
+}
+
+func fibonacci(c, quit chan int) {
+	x, y := 1, 1
+	for {
+		select {
+		case c <- x:
+			x += y
+			x, y = y, x
+		case <-quit:
+			return
+		}
+	}
 }

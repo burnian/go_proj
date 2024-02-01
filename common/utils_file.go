@@ -1,4 +1,4 @@
-package utilsFile
+package utils
 
 import "fmt"
 
@@ -6,6 +6,6 @@ func init() {
 	fmt.Println("utils_file.go init()")
 }
 
-func Show() string {
+func Show() {
 	fmt.Println("utils_file.go Show()")
 }
