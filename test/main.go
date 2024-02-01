@@ -105,6 +105,8 @@ func fibonacci(c, quit chan int) {
 }
 
 func main() {
+	fmt.Println("sdf")
+
 	//////////////////////////////////////////////////
 	// defer will be executed after the function returns as LIFO
 	// defer f1()
