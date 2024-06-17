@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 	"reflect"
+	"sync"
 
-	utils "common"
-	"test/libs"
+	"github.com/google/uuid"
 )
 
 // iota can be used only in const() block
@@ -16,14 +16,97 @@ const (
 	SHENZHEN
 )
 
+const (
+	Summer string = "summer"
+	Autumn        = "autumn"
+	Winter        = "winter"
+	Spring        = "spring"
+)
+
 type Book struct {
 	Title  string `json:"jtitle"`  //info:"抬头"
 	Author string `json:"jauthor"` //info:"作者"
 }
 
+var nSum int = 0
+var mu sync.Mutex
+
+func Add(i int) {
+	// mu.Lock()
+	nSum += 10
+	// mu.Unlock()
+}
+
+func Coordinates(value ...int) {
+	a := value
+	fmt.Println(a)
+}
+
 func main() {
-	utils.Show()
-	libs.Show1()
+	task_id := uuid.New().String()
+	fmt.Println(task_id)
+
+	// whole_time := time.Now().Format("2006.01.02 15:04:05")
+	// fmt.Println(whole_time)
+	// date := time.Now().Format("0102")
+	// fmt.Println(date)
+
+	// a := 123
+	// b := strconv.Itoa(a)
+	// b += "hello"
+	// fmt.Println(b)
+
+	// a := "1234567891234567891"
+	// u64, err := strconv.ParseUint(a, 10, 32)
+	// fmt.Println(u64, err)
+
+	// b := "1234567891234567891"
+	// str, err := strconv.Atoi(b)
+	// fmt.Println(str, err)
+
+	// books := []Book{}
+	// book := Book{"little_prince", "John"}
+	// p := book.Clone()
+	// fmt.Println(*p)
+	// p.Title = "new_title"
+	// p.Author = "new_author"
+	// fmt.Println(*p)
+	// fmt.Println(book)
+
+	// // append one element to an array from a function
+	// books = append(books, book)
+	// books = append(books, book)
+	// books = append(books, *p)
+	// fmt.Println(len(books))
+	// f6(&books)
+	// fmt.Println(len(books))
+	// fmt.Println(books)
+
+	// a := 2
+	// switch a {
+	// case 1:
+	// 	fmt.Println("a is 1")
+	// case 2:
+	// 	fmt.Println("a is 2")
+	// case 3:
+	// 	fmt.Println("a is 3")
+	// default:
+	// 	fmt.Println("a is not 1, 2, 3")
+	// }
+
+	//////////////////////////////////////////////////
+	// goroutine test
+	// var wg sync.WaitGroup
+	// for i := 0; i < 1000; i++ {
+	// 	wg.Add(1)
+	// 	go func() {
+	// 		Add(0)
+	// 		wg.Done()
+	// 	}()
+	// }
+	// wg.Wait()
+
+	// fmt.Println(">>>>>>>>>>>>>>>>>>>>>>nSum:", nSum)
 
 	//////////////////////////////////////////////////
 	// defer will be executed after the function returns as LIFO
@@ -129,7 +212,13 @@ func main() {
 	// fmt.Println("arr3:", arr3)
 
 	//////////////////////////////////////////////////
-	// map
+	// map test
+	// m := make(map[string]int, 0)
+	// m["a"] = 1
+	// m["b"] = 2
+	// v, ok := m["c"]
+	// fmt.Println(v, ok)
+
 	// m1 := make(map[string]int)
 	// m1["aaa"] = 111
 	// m1["bbb"] = 222
@@ -144,10 +233,33 @@ func main() {
 
 	// m2 := make(map[string]int)
 	// fmt.Println("m2:", m2)
-}
 
-func init() {
-	fmt.Println("main.go init()")
+	//////////////////////////////////////////////////
+	// file test
+	// fp, err := os.Create("/home/zhoubl1/dev/test.txt")
+	// if err != nil {
+	// fmt.Println("create file failed:", err)
+	// }
+	// defer fp.Close()
+
+	// file_path := "/nas/cache/dev/test.txt"
+	// fmt.Println(path.Base(file_path))
+	// fmt.Println(path.Dir(file_path))
+	// fmt.Println(path.Ext(file_path))
+	// fmt.Println(path.Split(file_path))
+	// str := strings.TrimSuffix(path.Base(file_path), ".txt")
+	// fmt.Println(str)
+
+	// m := map[string]bool{"a": true, "b": true}
+	// fmt.Println(m["a"])
+	// fmt.Println(m["c"])
+
+	// tile_id_dir := "/data/tomtom/country_tile_ids"
+	// file_paths, err := filepath.Glob(path.Join(tile_id_dir, "*.txt"))
+	// for _, file_path := range file_paths {
+	// 	fmt.Println(file_path)
+	// }
+	// fmt.Println(err)
 }
 
 // func f1() {
@@ -165,6 +277,23 @@ func init() {
 // func f4(arr [5]int) {
 // 	arr[0] = 99
 // }
+
+// func f5() Book {
+// 	return Book{"little_prince", "John"}
+// }
+
+func f6(a *[]Book) {
+	fmt.Println("f6", len(*a), cap(*a))
+	book := Book{"aaa", "bbb"}
+	*a = append(*a, book)
+	fmt.Println("f6", len(*a), cap(*a))
+}
+
+func (x Book) Clone() *Book {
+	p := new(Book)
+	*p = x
+	return p
+}
 
 // type assertion test
 func generalTypeTest(arg interface{}) {
